@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class Calculator_B { //calculator Basic
     //Variables
-    private List<String> no_num_2 = List.of("sqrt", "ln", "log", "sin", "cos", "tan", "csc", "sec", "cot"
+    private List<String> no_num_2 = Arrays.asList("sqrt", "ln", "log", "sin", "cos", "tan", "csc", "sec", "cot"
             , "asin", "acos", "atan", "acsc", "asec", "acot", "sind", "cosd", "tand", "cscd", "secd", "cotd","!");
 
     //Functions
