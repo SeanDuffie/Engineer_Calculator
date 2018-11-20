@@ -27,6 +27,7 @@ public class Algebra {
     }
 
     public String solveLin() {
+        public String solveLin() {
         //To Do: Converting equation to equivalent one sans parenthesis
         //Implement Distributive Property, Multiplication and division of parenthesis'd elements
         //First, split the eq into left and right side
@@ -49,15 +50,15 @@ public class Algebra {
                 if (leftside.charAt(i) == ' ') {
                 } else if (isNumeric(Character.toString(leftside.charAt(i))) || leftside.charAt(i) == 'x' || leftside.charAt(i) == '^') {
                     current += leftside.charAt(i);
-                    }
                 }
             }
+        }
         left_elements.add(current);
         current = "";
-        for(int i = 0;i<left_elements.size();i++){
-            if(left_elements.get(i).contains("^")){
-                if(degree<Integer.parseInt(left_elements.get(i).substring(left_elements.get(i).indexOf("^")+1))){
-                    degree = Integer.parseInt(left_elements.get(i).substring(left_elements.get(i).indexOf("^")+1));
+        for (int i = 0; i < left_elements.size(); i++) {
+            if (left_elements.get(i).contains("^")) {
+                if (degree < Integer.parseInt(left_elements.get(i).substring(left_elements.get(i).indexOf("^") + 1))) {
+                    degree = Integer.parseInt(left_elements.get(i).substring(left_elements.get(i).indexOf("^") + 1));
                 }
             }
         }
@@ -66,7 +67,7 @@ public class Algebra {
 
         for (int i = 0; i < rightside.length(); i++) {
             if (rightside.charAt(i) == '+' || rightside.charAt(i) == '-' || rightside.charAt(i) == '*' || rightside.charAt(i) == '/') {
-                if(i!=0){
+                if (i != 0) {
                     right_elements.add(current);
                     right_elements.add(Character.toString(rightside.charAt(i)));
                     current = "";
@@ -81,10 +82,10 @@ public class Algebra {
         }
         right_elements.add(current);
         current = "";
-        for(int i = 0;i<right_elements.size();i++){
-            if(right_elements.get(i).contains("^")){
-                if(degree<Integer.parseInt(right_elements.get(i).substring(right_elements.get(i).indexOf("^")+1))){
-                    degree = Integer.parseInt(right_elements.get(i).substring(right_elements.get(i).indexOf("^")+1));
+        for (int i = 0; i < right_elements.size(); i++) {
+            if (right_elements.get(i).contains("^")) {
+                if (degree < Integer.parseInt(right_elements.get(i).substring(right_elements.get(i).indexOf("^") + 1))) {
+                    degree = Integer.parseInt(right_elements.get(i).substring(right_elements.get(i).indexOf("^") + 1));
                 }
             }
         }
@@ -102,69 +103,74 @@ public class Algebra {
             }
         }
         //Add those together, subtract right side coefficients
-        ArrayList<String> coefficients = new ArrayList<String>();
-        ArrayList<String> constants = new ArrayList<String>();
+        ArrayList<Integer> coefficients = new ArrayList<Integer>();
+        ArrayList<Integer> constants = new ArrayList<Integer>();
         //start with left
         String curr_coeff = "";
+        boolean isNeg = false;
         for (int i = 0; i < left_elements.size(); i++) {
-            if (i != left_elements.size() - 1 && i != 0) {
-                if (left_elements.get(i).equals("-") && isNumeric(left_elements.get(i + 1))) {
-                    left_elements.set(i + 1, Integer.toString(Integer.parseInt(left_elements.get(i + 1)) * -1));
+            if(left_elements.get(i).equals("-")){
+                isNeg = true;
+            }
+            else if(left_elements.get(i).contains("x")){
+                if(isNeg){
+                    coefficients.add(Integer.parseInt("-"+
+                            left_elements.get(i).substring(0,left_elements.get(i).indexOf('x'))));
+                    isNeg = false;
                 }
-                if (isNumeric(left_elements.get(i)) && left_elements.get(i + 1).equals("x")) {
-                    coefficients.add(left_elements.get(i));
-                } else if (isNumeric(left_elements.get(i))) {
-                    left_elements.set(i, Integer.toString(Integer.parseInt(left_elements.get(i)) * -1)); //Left constants will be added to right side
-                    constants.add(left_elements.get(i));
-                } else if (left_elements.get(i).equals("x") && left_elements.get(i - 1).equals("+")) {
-                    coefficients.add("1");
-                } else if (left_elements.get(i).equals("x") && left_elements.get(i - 1).equals("-")) {
-                    coefficients.add("-1");
+                else{
+                    coefficients.add(Integer.parseInt(left_elements.get(i).substring(0,left_elements.get(i).indexOf('x'))));
                 }
-            } else {
-                if (isNumeric(left_elements.get(i))) {
-                    left_elements.set(i, Integer.toString(Integer.parseInt(left_elements.get(i)) * -1));
-                    constants.add(left_elements.get(i));
-                } else if (left_elements.get(0).equals("x")) {
-                    coefficients.add("1");
-                } else if (left_elements.get(i).equals("x") && left_elements.get(i - 1).equals("-")) {
-                    coefficients.add("-1");
+            }
+            else if(isNumeric(left_elements.get(i))){
+                if(isNeg){
+                    constants.add(Integer.parseInt(left_elements.get(i)));
+                    isNeg = false;
+                }
+                else{
+                    constants.add(Integer.parseInt("-"+left_elements.get(i)));
+
                 }
             }
         }
         //Also do the right
-        curr_coeff = "";
         for (int i = 0; i < right_elements.size(); i++) {
-            if (i != right_elements.size() - 1 && i != 0) {
-                if (right_elements.get(i).equals("-") && isNumeric(right_elements.get(i + 1))) {
-                    right_elements.set(i + 1, Integer.toString(Integer.parseInt(right_elements.get(i + 1))));
+            if(right_elements.get(i).equals("-")){
+                isNeg = true;
+            }
+            else if(right_elements.get(i).contains("x")){
+                if(isNeg){
+                    coefficients.add(Integer.parseInt(
+                            right_elements.get(i).substring(0,right_elements.get(i).indexOf('x'))));
+                    isNeg = false;
                 }
-                if (isNumeric(right_elements.get(i)) && right_elements.get(i + 1).equals("x")) {
-                    right_elements.set(i, Integer.toString(Integer.parseInt(right_elements.get(i)) * -1)); //Right coefficients will be added to left side
-                    coefficients.add(right_elements.get(i));
-                } else if (isNumeric(right_elements.get(i))) {
-                    constants.add(right_elements.get(i));
+                else{
+                    coefficients.add(Integer.parseInt("-"+
+                            right_elements.get(i).substring(0,right_elements.get(i).indexOf('x'))));
                 }
-            } else {
-                if (isNumeric(right_elements.get(i))) {
-                    constants.add(right_elements.get(i));
-                } else if (right_elements.get(0).equals("x")) {
-                    coefficients.add("-1");
-                } else if (right_elements.get(i).equals("x") && right_elements.get(i - 1).equals("-")) {
-                    coefficients.add("1");
+            }
+            else if(isNumeric(right_elements.get(i))){
+                if(isNeg){
+                    constants.add(Integer.parseInt("-"+right_elements.get(i)));
+                    isNeg = false;
+                }
+                else{
+                    constants.add(Integer.parseInt(right_elements.get(i)));
                 }
             }
         }
-        System.out.println(coefficients);
+        curr_coeff = "";
         //Add Coefficients and Constants
         int coeff_sum = 0;
         int const_sum = 0;
         for (int i = 0; i < coefficients.size(); i++) {
-            coeff_sum += Integer.parseInt(coefficients.get(i));
+            coeff_sum += coefficients.get(i);
         }
+        System.out.println(coefficients);
         for (int i = 0; i < constants.size(); i++) {
-            const_sum += Integer.parseInt(constants.get(i));
+            const_sum += constants.get(i);
         }
+        System.out.println(constants);
         if (const_sum == 0 && const_sum != coeff_sum) {
             return "x = 0";
         } else if (coeff_sum == 0 && const_sum == coeff_sum) {
@@ -175,7 +181,6 @@ public class Algebra {
             return "x = " + simplifiedFrac(const_sum, coeff_sum);
         }
     }
-
 
 
 
